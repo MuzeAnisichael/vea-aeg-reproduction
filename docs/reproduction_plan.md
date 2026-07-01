@@ -2,7 +2,7 @@
 
 ## 1. Environment
 
-Use Ubuntu 18.04 or a close VM image. Install Python 3.8+, compiler/debug tools,
+Use Ubuntu 18.04 or a close VM image. Install Python 3.10+, compiler/debug tools,
 radare2, and the Python dependencies in `requirements.txt`.
 
 Minimum Python dependency command:
@@ -93,4 +93,3 @@ Prepare separate pinned environments for:
 - BofAEG: paper reference
 
 Run every binary three times and report median wall-clock time.
-

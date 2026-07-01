@@ -39,11 +39,26 @@ python -m vea_aeg smoke --json
 python -m unittest discover -s tests
 ```
 
+If `gcc` or `radare2` fail to install, skip them. The Windows flow has a
+pure-Python inventory backend:
+
+```powershell
+python -m vea_aeg inventory C:\Windows\System32\notepad.exe --backend basic --json
+```
+
+The default `inventory` mode is `auto`, so it will use radare2 when present and
+fall back to the basic backend when it is not:
+
+```powershell
+python -m vea_aeg inventory C:\Windows\System32\notepad.exe --json
+```
+
 ## Smoke Flow
 
 ```powershell
 python -m vea_aeg dangerous
 python -m vea_aeg smoke --json
+python -m vea_aeg inventory C:\Windows\System32\notepad.exe --backend basic --json
 python -m vea_aeg plan IP_OVERWRITE --json
 python -m vea_aeg plan WRITE_WHAT_WHERE --json
 ```
@@ -60,4 +75,3 @@ This exercises:
 After the Windows smoke flow works, use WSL2/Docker/VM only for the Linux-only
 parts: compiling ELF samples, running radare2/gdb/checksec, and verifying
 payloads against Linux libc.
-

@@ -24,7 +24,7 @@
 建议环境：
 
 - Ubuntu 18.04/20.04 x86_64 VM
-- Python 3.8+
+- Python 3.10+
 - 8 GB+ RAM
 - `gcc`, `gdb`, `binutils`, `checksec`, `radare2`
 - Python packages listed in `requirements.txt`
@@ -107,4 +107,3 @@ Not yet fully implemented:
 - Full exploit payload generation.
 - Baseline reproduction for AEGAngr, Zeratool, and BofAEG.
 - Paper Table 2 timing reproduction.
-

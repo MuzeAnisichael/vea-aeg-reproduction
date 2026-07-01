@@ -23,8 +23,14 @@ def build_parser() -> argparse.ArgumentParser:
     dangerous = subparsers.add_parser("dangerous", help="print default dangerous functions")
     dangerous.add_argument("--json", action="store_true")
 
-    inventory = subparsers.add_parser("inventory", help="collect radare2 binary inventory")
+    inventory = subparsers.add_parser("inventory", help="collect binary inventory")
     inventory.add_argument("binary", type=Path)
+    inventory.add_argument(
+        "--backend",
+        choices=("auto", "radare2", "basic"),
+        default="auto",
+        help="auto falls back to a pure-Python basic backend when radare2 is unavailable",
+    )
     inventory.add_argument("--json", action="store_true")
 
     analyze = subparsers.add_parser("analyze", help="run static VEA-AEG analysis scaffold")
@@ -69,7 +75,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
 
         if args.command == "inventory":
-            report = inventory_binary(args.binary)
+            report = inventory_binary(args.binary, backend=args.backend)
             _print_or_json(report if args.json else dumps_json(report), args.json)
             return 0
 
