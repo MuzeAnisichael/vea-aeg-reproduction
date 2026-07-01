@@ -9,8 +9,9 @@ dist/
 build/
 reports/
 artifacts/
+data/challenges/*
+!data/challenges/.gitkeep
 examples/toy/vuln*
 examples/toy/core
 *.core
 *.log
-

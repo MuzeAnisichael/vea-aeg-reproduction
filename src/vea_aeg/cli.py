@@ -9,7 +9,9 @@ from .dangerous_functions import (
     load_dangerous_functions,
     parse_dangerous_functions,
 )
+from .dataset import DEFAULT_DATA_DIR, DEFAULT_MANIFEST, download_manifest, load_manifest
 from .errors import ReproductionDependencyError
+from .experiment import markdown_table, run_manifest_experiment
 from .exploit_builder import choose_exploit_plan, inventory_binary
 from .report import dumps_json
 from .smoke import run_smoke_flow
@@ -51,6 +53,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="run a Windows-friendly flow test without angr, radare2, or Linux ELF execution",
     )
     smoke.add_argument("--json", action="store_true")
+
+    download_data = subparsers.add_parser("download-data", help="download public CTF resources")
+    download_data.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    download_data.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    download_data.add_argument("--force", action="store_true")
+    download_data.add_argument("--json", action="store_true")
+
+    experiment = subparsers.add_parser(
+        "experiment",
+        help="generate a paper-format result table using the Windows basic backend",
+    )
+    experiment.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    experiment.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    experiment.add_argument("--out-dir", type=Path, default=Path("reports"))
+    experiment.add_argument("--json", action="store_true")
 
     return parser
 
@@ -109,6 +126,25 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.command == "smoke":
             result = run_smoke_flow()
             _print_or_json(result if args.json else dumps_json(result), args.json)
+            return 0
+
+        if args.command == "download-data":
+            result = download_manifest(
+                load_manifest(args.manifest),
+                args.data_dir,
+                force=args.force,
+            )
+            _print_or_json(result if args.json else dumps_json(result), args.json)
+            return 0
+
+        if args.command == "experiment":
+            rows, outputs = run_manifest_experiment(args.manifest, args.data_dir, args.out_dir)
+            if args.json:
+                _print_or_json({"rows": rows, "outputs": outputs}, True)
+            else:
+                print(markdown_table(rows))
+                print(f"wrote: {outputs['markdown']}")
+                print(f"wrote: {outputs['csv']}")
             return 0
     except ReproductionDependencyError as exc:
         parser.exit(2, f"dependency error: {exc}\n")

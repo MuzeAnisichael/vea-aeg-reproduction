@@ -1,0 +1,152 @@
+[
+  {
+    "name": "CTF_Wiki_ret2syscall",
+    "urls": [
+      "https://github.com/ctf-wiki/ctf-challenges/raw/master/pwn/linux/user-mode/stackoverflow/ret2syscall/bamboofox-ret2syscall/rop"
+    ]
+  },
+  {
+    "name": "CTF_Wiki_ret2shellcode",
+    "urls": [
+      "https://github.com/ctf-wiki/ctf-challenges/raw/master/pwn/linux/user-mode/stackoverflow/ret2shellcode/ret2shellcode-example/ret2shellcode"
+    ]
+  },
+  {
+    "name": "csictf2020_pwn0x1",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/csictf2020_pwn0x1"
+    ]
+  },
+  {
+    "name": "csictf2020_pwn0x2",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/csictf2020_pwn0x2"
+    ]
+  },
+  {
+    "name": "csictf2020_pwn0x3",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/csictf2020_pwn0x3"
+    ]
+  },
+  {
+    "name": "umdctf2021_jne",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/umdctf2021_jne"
+    ]
+  },
+  {
+    "name": "csawctf2021_password",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/csawctf2021_password"
+    ]
+  },
+  {
+    "name": "h@cktivityctf2021_retcheck",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/h@cktivityctf2021_retcheck"
+    ]
+  },
+  {
+    "name": "csawctf2020_roppity",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/csawctf2020_roppity"
+    ]
+  },
+  {
+    "name": "dctf2021_babybof",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/dctf2021_babybof"
+    ]
+  },
+  {
+    "name": "dctf2021_hotelrop",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/dctf2021_hotelrop"
+    ]
+  },
+  {
+    "name": "dctf2021_sanity",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/dctf2021_sanity"
+    ]
+  },
+  {
+    "name": "dicectf2021_babyrop",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/dicectf2021_babyrop"
+    ]
+  },
+  {
+    "name": "downunderctf2020_return",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/downunderctf2020_return"
+    ]
+  },
+  {
+    "name": "downunderctf2021_deadcode",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/downunderctf2021_deadcode"
+    ]
+  },
+  {
+    "name": "downunderctf2021_out",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/downunderctf2021_out"
+    ]
+  },
+  {
+    "name": "lexingtonctf2021_gets",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/lexingtonctf2021_gets"
+    ]
+  },
+  {
+    "name": "lexingtonctf2021_madlibs",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/lexingtonctf2021_madlibs"
+    ]
+  },
+  {
+    "name": "nahamconctf2021_smol",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/nahamconctf2021_smol"
+    ]
+  },
+  {
+    "name": "redpwnctf2020_coffer",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/redpwnctf2020_coffer"
+    ]
+  },
+  {
+    "name": "sharkyctf2020_give",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/sharkyctf2020_give"
+    ]
+  },
+  {
+    "name": "tamilctf2021_name",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/tamilctf2021_name"
+    ]
+  },
+  {
+    "name": "umdctf2021_jnw",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/umdctf2021_jnw"
+    ]
+  },
+  {
+    "name": "utctf2021_resolve",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/utctf2021_resolve"
+    ]
+  },
+  {
+    "name": "wpictf2020_dorsia1",
+    "urls": [
+      "https://github.com/LaiLaK918/bofAEG/raw/master/challenges/wpictf2020_dorsia1"
+    ]
+  }
+]

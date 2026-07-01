@@ -75,3 +75,29 @@ This exercises:
 After the Windows smoke flow works, use WSL2/Docker/VM only for the Linux-only
 parts: compiling ELF samples, running radare2/gdb/checksec, and verifying
 payloads against Linux libc.
+
+## Paper-Format Table on Windows
+
+Download the public challenge binaries listed in `data/challenge_manifest.json`:
+
+```powershell
+python -m vea_aeg download-data --json
+```
+
+Generate a table with the same columns as the paper:
+
+```powershell
+python -m vea_aeg experiment
+```
+
+Outputs:
+
+- `reports/windows_basic_experiment_table.md`
+- `reports/windows_basic_experiment_table.csv`
+
+The Windows table uses:
+
+- computed ELF `NX` and `PIE` where the binary is available;
+- `N/R` for AEGAngr, Zeratool, and BofAEG because those baselines are not run
+  in the Windows basic mode;
+- local Windows basic-backend runtime in the `VEA-AEG` column.
