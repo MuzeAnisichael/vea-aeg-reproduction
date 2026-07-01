@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vea-aeg-reproduction"
+version = "0.1.0"
+description = "Research scaffold for reproducing the VEA-AEG paper workflow on authorized local binaries."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "VEA-AEG Reproduction" }]
+dependencies = [
+  "angr",
+  "claripy",
+  "z3-solver",
+  "pwntools",
+  "r2pipe",
+  "ROPGadget",
+  "capstone",
+  "unicorn",
+  "pyelftools",
+  "networkx",
+]
+
+[project.scripts]
+vea-aeg = "vea_aeg.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+

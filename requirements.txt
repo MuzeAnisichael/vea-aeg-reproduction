@@ -1,0 +1,11 @@
+angr
+claripy
+z3-solver
+pwntools
+r2pipe
+ROPGadget
+capstone
+unicorn
+pyelftools
+networkx
+
