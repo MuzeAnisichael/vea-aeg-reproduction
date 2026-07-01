@@ -12,6 +12,7 @@ from .dangerous_functions import (
 from .errors import ReproductionDependencyError
 from .exploit_builder import choose_exploit_plan, inventory_binary
 from .report import dumps_json
+from .smoke import run_smoke_flow
 from .static_analysis import analyze_static
 
 
@@ -38,6 +39,12 @@ def build_parser() -> argparse.ArgumentParser:
     plan.add_argument("finding_type", help="example: IP_OVERWRITE, WRITE_WHAT_WHERE")
     plan.add_argument("--binary", type=Path, help="optional binary for resource inventory")
     plan.add_argument("--json", action="store_true")
+
+    smoke = subparsers.add_parser(
+        "smoke",
+        help="run a Windows-friendly flow test without angr, radare2, or Linux ELF execution",
+    )
+    smoke.add_argument("--json", action="store_true")
 
     return parser
 
@@ -92,9 +99,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             result = choose_exploit_plan(finding, inventory)
             _print_or_json(result if args.json else dumps_json(result), args.json)
             return 0
+
+        if args.command == "smoke":
+            result = run_smoke_flow()
+            _print_or_json(result if args.json else dumps_json(result), args.json)
+            return 0
     except ReproductionDependencyError as exc:
         parser.exit(2, f"dependency error: {exc}\n")
 
     parser.error(f"unknown command: {args.command}")
     return 2
-
