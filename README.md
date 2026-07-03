@@ -14,6 +14,16 @@ bash scripts/install_baselines_ubuntu.sh
 bash scripts/run_ubuntu_full_experiment.sh
 ```
 
+When running without baseline tools, keep the VEA-AEG resource inventory backend
+on `auto` unless radare2 is installed:
+
+```bash
+python -m vea_aeg ubuntu-experiment --skip-baselines --inventory-backend auto
+```
+
+Use `--inventory-backend basic` to force the pure Python inventory fallback, or
+`--inventory-backend radare2` for strict radare2 inventory.
+
 Main outputs:
 
 ```text

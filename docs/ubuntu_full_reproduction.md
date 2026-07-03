@@ -181,7 +181,8 @@ python -m vea_aeg ubuntu-experiment \
   --baseline-timeout 900 \
   --vea-timeout 120 \
   --max-steps 2000 \
-  --input-size 256
+  --input-size 256 \
+  --inventory-backend auto
 ```
 
 Run only the repository VEA-AEG flow:
@@ -192,7 +193,8 @@ python -m vea_aeg ubuntu-experiment \
   --data-dir data/challenges \
   --out-dir reports \
   --repo-root "$PWD" \
-  --skip-baselines
+  --skip-baselines \
+  --inventory-backend auto
 ```
 
 Skip local payload execution while keeping payload generation:
@@ -255,6 +257,15 @@ If baseline columns show `N/R`:
 1. Run bash scripts/install_baselines_ubuntu.sh
 2. Check configs/baselines.ubuntu.json entrypoints
 3. Run the baseline command manually for one binary
+```
+
+If `VEA-AEG` shows `ERR:FileNotFoundError`:
+
+```text
+1. Older versions forced radare2 inventory even when --skip-baselines was used
+2. Use the current default --inventory-backend auto
+3. If you want strict paper-like radare2 inventory, install radare2 and use --inventory-backend radare2
+4. If you only want to keep the flow running, use --inventory-backend basic
 ```
 
 If radare2 fails:

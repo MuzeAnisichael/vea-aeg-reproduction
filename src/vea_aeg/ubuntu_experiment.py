@@ -293,6 +293,7 @@ def run_vea_aeg_full(
     out_dir: str | Path,
     cfg_kind: str = "emulated",
     slice_depth: int = 64,
+    inventory_backend: str = "auto",
     input_size: int = 256,
     timeout_seconds: float = 120.0,
     max_steps: int = 2000,
@@ -322,7 +323,8 @@ def run_vea_aeg_full(
             suspicious_addresses = [static_report.entry]
             notes.append("no dangerous-function slice found; started symbolic search at entry")
 
-        inventory = inventory_binary(binary_path, backend="radare2")
+        inventory = inventory_binary(binary_path, backend=inventory_backend)
+        notes.extend(inventory.notes)
         symbolic = run_symbolic_flow(
             binary_path,
             suspicious_addresses,
@@ -405,6 +407,7 @@ def run_ubuntu_challenge(
     vea_timeout: float,
     max_steps: int,
     input_size: int,
+    inventory_backend: str,
     skip_validate: bool,
 ) -> UbuntuChallengeResult:
     binary = Path(data_dir) / resource.name
@@ -433,6 +436,7 @@ def run_ubuntu_challenge(
         timeout_seconds=vea_timeout,
         max_steps=max_steps,
         input_size=input_size,
+        inventory_backend=inventory_backend,
         skip_validate=skip_validate,
     )
     row = ExperimentRow(
@@ -500,6 +504,7 @@ def run_ubuntu_experiment(
     vea_timeout: float = 120.0,
     max_steps: int = 2000,
     input_size: int = 256,
+    inventory_backend: str = "auto",
     skip_validate: bool = False,
 ) -> Tuple[List[UbuntuChallengeResult], UbuntuExperimentOutputs]:
     results = [
@@ -515,6 +520,7 @@ def run_ubuntu_experiment(
             vea_timeout=vea_timeout,
             max_steps=max_steps,
             input_size=input_size,
+            inventory_backend=inventory_backend,
             skip_validate=skip_validate,
         )
         for resource in resources
@@ -536,6 +542,7 @@ def run_manifest_ubuntu_experiment(
     vea_timeout: float = 120.0,
     max_steps: int = 2000,
     input_size: int = 256,
+    inventory_backend: str = "auto",
     skip_validate: bool = False,
 ) -> Tuple[List[UbuntuChallengeResult], UbuntuExperimentOutputs]:
     return run_ubuntu_experiment(
@@ -550,5 +557,6 @@ def run_manifest_ubuntu_experiment(
         vea_timeout=vea_timeout,
         max_steps=max_steps,
         input_size=input_size,
+        inventory_backend=inventory_backend,
         skip_validate=skip_validate,
     )

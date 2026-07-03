@@ -90,6 +90,12 @@ def build_parser() -> argparse.ArgumentParser:
     ubuntu_experiment.add_argument("--vea-timeout", type=float, default=120.0)
     ubuntu_experiment.add_argument("--max-steps", type=int, default=2000)
     ubuntu_experiment.add_argument("--input-size", type=int, default=256)
+    ubuntu_experiment.add_argument(
+        "--inventory-backend",
+        choices=("auto", "radare2", "basic"),
+        default="auto",
+        help="resource inventory backend for VEA-AEG; auto falls back when radare2 is missing",
+    )
     ubuntu_experiment.add_argument("--json", action="store_true")
 
     return parser
@@ -183,6 +189,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 vea_timeout=args.vea_timeout,
                 max_steps=args.max_steps,
                 input_size=args.input_size,
+                inventory_backend=args.inventory_backend,
                 skip_validate=args.skip_validate,
             )
             rows = [result.row for result in results]

@@ -20,4 +20,5 @@ python -m vea_aeg ubuntu-experiment \
   --baseline-timeout "${BASELINE_TIMEOUT:-900}" \
   --vea-timeout "${VEA_TIMEOUT:-120}" \
   --max-steps "${VEA_MAX_STEPS:-2000}" \
-  --input-size "${VEA_INPUT_SIZE:-256}"
+  --input-size "${VEA_INPUT_SIZE:-256}" \
+  --inventory-backend "${VEA_INVENTORY_BACKEND:-auto}"

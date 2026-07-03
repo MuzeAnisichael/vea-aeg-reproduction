@@ -173,7 +173,8 @@ python -m vea_aeg ubuntu-experiment \
   --baseline-timeout 900 \
   --vea-timeout 120 \
   --max-steps 2000 \
-  --input-size 256
+  --input-size 256 \
+  --inventory-backend auto
 ```
 
 只运行本仓库的 VEA-AEG 流程，不运行三个基线：
@@ -184,7 +185,8 @@ python -m vea_aeg ubuntu-experiment \
   --data-dir data/challenges \
   --out-dir reports \
   --repo-root "$PWD" \
-  --skip-baselines
+  --skip-baselines \
+  --inventory-backend auto
 ```
 
 生成 payload 但不执行本地验证：
@@ -248,6 +250,15 @@ ERR:<type>    内部异常或外部工具错误
 1. 先执行 bash scripts/install_baselines_ubuntu.sh
 2. 检查 configs/baselines.ubuntu.json 中的入口脚本是否存在
 3. 单独运行该工具命令，确认工具本身可以启动
+```
+
+如果 `VEA-AEG` 显示 `ERR:FileNotFoundError`：
+
+```text
+1. 旧版本即使使用 --skip-baselines，也会在 VEA-AEG 内部强制调用 radare2 盘点资源
+2. 使用当前默认参数 --inventory-backend auto
+3. 如果要严格接近论文的 radare2 资源盘点，安装 radare2 后使用 --inventory-backend radare2
+4. 如果只是先跑通流程，使用 --inventory-backend basic
 ```
 
 如果 radare2 报错：
