@@ -11,6 +11,10 @@ from .exploit_builder import choose_exploit_plan, inventory_binary
 from .exploitability import ExploitabilityFinding
 
 
+CHECK_MARK = "\u221a"
+NO_MARK = "x"
+
+
 @dataclass
 class ExperimentRow:
     Challenge: str
@@ -43,7 +47,7 @@ def inspect_elf_nx_pie(path: str | Path) -> Tuple[str, str]:
     if endian != 1:
         return "?", "?"
     e_type = _u16(data, 16)
-    pie = "√" if e_type == 3 else "x" if e_type == 2 else "?"
+    pie = CHECK_MARK if e_type == 3 else NO_MARK if e_type == 2 else "?"
 
     if elf_class == 1:
         phoff = _u32(data, 28)
@@ -68,7 +72,7 @@ def inspect_elf_nx_pie(path: str | Path) -> Tuple[str, str]:
         p_type = _u32(data, entry + p_type_offset)
         if p_type == 0x6474E551:  # PT_GNU_STACK
             flags = _u32(data, entry + p_flags_offset)
-            nx = "x" if flags & 0x1 else "√"
+            nx = NO_MARK if flags & 0x1 else CHECK_MARK
             break
     return nx, pie
 
@@ -154,4 +158,3 @@ def run_manifest_experiment(
     rows = run_experiment(load_manifest(manifest), data_dir)
     outputs = write_outputs(rows, out_dir)
     return rows, outputs
-

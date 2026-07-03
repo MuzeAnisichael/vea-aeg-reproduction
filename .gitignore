@@ -9,6 +9,7 @@ dist/
 build/
 reports/
 artifacts/
+third_party/
 data/challenges/*
 !data/challenges/.gitkeep
 examples/toy/vuln*

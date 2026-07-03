@@ -115,26 +115,95 @@ def approximate_backward_slice(cfg, callsite_address: int, *, max_depth: int = 6
     return visited
 
 
+def exact_backward_slice(project, cfg, callsite_address: int) -> tuple[Set[int], str]:
+    """Try the paper-style CDG/DDG BackwardSlice.
+
+    angr's DDG and BackwardSlice APIs are version-sensitive, so this function
+    keeps extraction defensive and reports a fallback reason to the caller.
+    """
+
+    target = cfg.model.get_any_node(callsite_address)
+    if target is None:
+        return set(), "no CFG node for target callsite"
+
+    cdg = project.analyses.CDG(cfg)
+    ddg = project.analyses.DDG(cfg)
+    backward_slice = project.analyses.BackwardSlice(
+        cfg,
+        cdg=cdg,
+        ddg=ddg,
+        targets=[(target, -1)],
+    )
+
+    addresses: Set[int] = set()
+    for attr_name in ("runs_in_slice", "chosen_statements"):
+        value = getattr(backward_slice, attr_name, None)
+        if not value:
+            continue
+        items = value.keys() if hasattr(value, "keys") else value
+        for item in items:
+            node = item[0] if isinstance(item, tuple) and item else item
+            addr = getattr(node, "addr", None)
+            if addr is not None:
+                addresses.add(int(addr))
+
+    if not addresses:
+        return set(), "BackwardSlice produced no extractable addresses"
+    return addresses, "CDG/DDG BackwardSlice"
+
+
+def build_suspicious_slice(
+    project,
+    cfg,
+    callsite_address: int,
+    *,
+    max_depth: int = 64,
+    prefer_exact_slice: bool = False,
+) -> SuspiciousSlice:
+    if prefer_exact_slice:
+        try:
+            exact_addresses, exact_note = exact_backward_slice(project, cfg, callsite_address)
+            if exact_addresses:
+                callsite = DangerousCallSite("", 0, callsite_address)
+                return SuspiciousSlice(callsite=callsite, addresses=exact_addresses, notes=[exact_note])
+            fallback_note = exact_note
+        except Exception as exc:
+            fallback_note = f"CDG/DDG BackwardSlice unavailable: {type(exc).__name__}: {exc}"
+    else:
+        fallback_note = "bounded CFG-predecessor slice"
+
+    callsite = DangerousCallSite("", 0, callsite_address)
+    return SuspiciousSlice(
+        callsite=callsite,
+        addresses=approximate_backward_slice(cfg, callsite_address, max_depth=max_depth),
+        notes=[fallback_note, "bounded CFG-predecessor fallback"],
+    )
+
+
 def analyze_static(
     binary_path: str | Path,
     *,
     dangerous_functions: Optional[Iterable[str]] = None,
     cfg_kind: str = "emulated",
     slice_depth: int = 64,
+    prefer_exact_slice: bool = False,
 ) -> StaticAnalysisReport:
     binary = Path(binary_path)
     project = load_project(binary)
     cfg = build_cfg(project, cfg_kind=cfg_kind)
     functions = tuple(dangerous_functions or DEFAULT_DANGEROUS_FUNCTIONS)
     callsites = find_dangerous_callsites(project, cfg, functions)
-    slices = [
-        SuspiciousSlice(
-            callsite=callsite,
-            addresses=approximate_backward_slice(cfg, callsite.callsite_address, max_depth=slice_depth),
-            notes=["bounded CFG-predecessor slice; replace with CDG/DDG BackwardSlice for parity"],
+    slices = []
+    for callsite in callsites:
+        suspicious_slice = build_suspicious_slice(
+            project,
+            cfg,
+            callsite.callsite_address,
+            max_depth=slice_depth,
+            prefer_exact_slice=prefer_exact_slice,
         )
-        for callsite in callsites
-    ]
+        suspicious_slice.callsite = callsite
+        slices.append(suspicious_slice)
     return StaticAnalysisReport(
         binary=str(binary),
         arch=project.arch.name,
@@ -143,4 +212,3 @@ def analyze_static(
         dangerous_callsites=callsites,
         suspicious_slices=slices,
     )
-

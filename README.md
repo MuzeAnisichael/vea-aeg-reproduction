@@ -1,3 +1,43 @@
+# VEA-AEG Reproduction
+
+This repository contains an independent reproduction scaffold for the paper
+`VEA-AEG: An Automated Exploit Generation Method Based on Vulnerability
+Exploitability Analysis`.
+
+New Ubuntu full-flow entrypoint:
+
+```bash
+bash scripts/bootstrap_ubuntu.sh
+source .venv/bin/activate
+python -m vea_aeg download-data
+bash scripts/install_baselines_ubuntu.sh
+bash scripts/run_ubuntu_full_experiment.sh
+```
+
+Main outputs:
+
+```text
+reports/ubuntu_full_experiment_table.md
+reports/ubuntu_full_experiment_table.csv
+reports/ubuntu_full_experiment_results.json
+reports/ubuntu_full_details/
+reports/payloads/
+```
+
+Detailed instructions:
+[`docs/ubuntu_full_reproduction.md`](docs/ubuntu_full_reproduction.md) and
+[`docs/ubuntu_full_reproduction_zh.md`](docs/ubuntu_full_reproduction_zh.md).
+
+The result table keeps the paper columns:
+
+```text
+Challenge | NX | PIE | AEGAngr | Zeratool | BofAEG | VEA-AEG
+```
+
+The original VEA-AEG implementation, exact parameters, baseline commits, and
+challenge hashes were not published, so this repository records detailed JSON
+evidence for every challenge.
+
 # VEA-AEG Reproduction Scaffold
 
 这是 `PAPER.docx` 中 VEA-AEG 方法的复现仓库骨架。目标是把论文中的三个核心算法拆成可运行模块：

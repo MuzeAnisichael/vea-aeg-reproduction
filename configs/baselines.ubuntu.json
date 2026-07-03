@@ -1,0 +1,38 @@
+{
+  "tools": [
+    {
+      "name": "AEGAngr",
+      "enabled": true,
+      "timeout_seconds": 900,
+      "commands": [
+        ["python3", "{tool_root}/AEG-ANGR/aeg.py", "{binary}"],
+        ["python3", "{tool_root}/AEG-ANGR/main.py", "{binary}"],
+        ["python3", "{tool_root}/AEG-ANGR/AEG.py", "{binary}"]
+      ],
+      "success_patterns": ["success", "payload", "shell", "flag", "win"]
+    },
+    {
+      "name": "Zeratool",
+      "enabled": true,
+      "timeout_seconds": 900,
+      "commands": [
+        ["zerapwn.py", "{binary}", "--skip_check", "--overflow_only", "--no_win"],
+        ["python3", "{tool_root}/Zeratool/bin/zerapwn.py", "{binary}", "--skip_check", "--overflow_only", "--no_win"],
+        ["python3", "{tool_root}/Zeratool/zerapwn.py", "{binary}", "--skip_check", "--overflow_only", "--no_win"]
+      ],
+      "success_patterns": ["success", "payload", "shell", "flag", "win"]
+    },
+    {
+      "name": "BofAEG",
+      "enabled": true,
+      "timeout_seconds": 900,
+      "commands": [
+        ["python3", "{tool_root}/bofAEG/bofAEG.py", "{binary}"],
+        ["python3", "{tool_root}/bofAEG/bof_aeg.py", "{binary}"],
+        ["python3", "{tool_root}/bofAEG/main.py", "{binary}"],
+        ["python3", "{tool_root}/bof_aeg/bofAEG.py", "{binary}"]
+      ],
+      "success_patterns": ["success", "payload", "shell", "flag", "win"]
+    }
+  ]
+}

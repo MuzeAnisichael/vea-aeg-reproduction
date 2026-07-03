@@ -16,6 +16,7 @@ from .exploit_builder import choose_exploit_plan, inventory_binary
 from .report import dumps_json
 from .smoke import run_smoke_flow
 from .static_analysis import analyze_static
+from .ubuntu_experiment import run_manifest_ubuntu_experiment
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -68,6 +69,28 @@ def build_parser() -> argparse.ArgumentParser:
     experiment.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     experiment.add_argument("--out-dir", type=Path, default=Path("reports"))
     experiment.add_argument("--json", action="store_true")
+
+    ubuntu_experiment = subparsers.add_parser(
+        "ubuntu-experiment",
+        help="run the Ubuntu paper-flow reproduction with VEA-AEG and baseline tool timings",
+    )
+    ubuntu_experiment.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    ubuntu_experiment.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    ubuntu_experiment.add_argument("--out-dir", type=Path, default=Path("reports"))
+    ubuntu_experiment.add_argument("--repo-root", type=Path, default=Path("."))
+    ubuntu_experiment.add_argument(
+        "--baseline-config",
+        type=Path,
+        default=Path("configs/baselines.ubuntu.json"),
+    )
+    ubuntu_experiment.add_argument("--tool-root", type=Path, default=Path("third_party"))
+    ubuntu_experiment.add_argument("--skip-baselines", action="store_true")
+    ubuntu_experiment.add_argument("--skip-validate", action="store_true")
+    ubuntu_experiment.add_argument("--baseline-timeout", type=float, default=900.0)
+    ubuntu_experiment.add_argument("--vea-timeout", type=float, default=120.0)
+    ubuntu_experiment.add_argument("--max-steps", type=int, default=2000)
+    ubuntu_experiment.add_argument("--input-size", type=int, default=256)
+    ubuntu_experiment.add_argument("--json", action="store_true")
 
     return parser
 
@@ -145,6 +168,32 @@ def main(argv: Sequence[str] | None = None) -> int:
                 print(markdown_table(rows))
                 print(f"wrote: {outputs['markdown']}")
                 print(f"wrote: {outputs['csv']}")
+            return 0
+
+        if args.command == "ubuntu-experiment":
+            results, outputs = run_manifest_ubuntu_experiment(
+                args.manifest,
+                data_dir=args.data_dir,
+                out_dir=args.out_dir,
+                repo_root=args.repo_root,
+                baseline_config=args.baseline_config,
+                tool_root=args.tool_root,
+                skip_baselines=args.skip_baselines,
+                baseline_timeout=args.baseline_timeout,
+                vea_timeout=args.vea_timeout,
+                max_steps=args.max_steps,
+                input_size=args.input_size,
+                skip_validate=args.skip_validate,
+            )
+            rows = [result.row for result in results]
+            if args.json:
+                _print_or_json({"results": results, "outputs": outputs}, True)
+            else:
+                print(markdown_table(rows))
+                print(f"wrote: {outputs.markdown}")
+                print(f"wrote: {outputs.csv}")
+                print(f"wrote: {outputs.json}")
+                print(f"wrote: {outputs.details_dir}")
             return 0
     except ReproductionDependencyError as exc:
         parser.exit(2, f"dependency error: {exc}\n")

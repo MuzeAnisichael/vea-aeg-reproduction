@@ -63,6 +63,10 @@ def download_one(resource: ChallengeResource, data_dir: str | Path, *, force: bo
             with urllib.request.urlopen(request, timeout=60) as response:
                 data = response.read()
             target.write_bytes(data)
+            try:
+                target.chmod(target.stat().st_mode | 0o111)
+            except OSError:
+                pass
             return DownloadResult(
                 name=resource.name,
                 path=str(target),
@@ -89,4 +93,3 @@ def download_manifest(
     force: bool = False,
 ) -> List[DownloadResult]:
     return [download_one(resource, data_dir, force=force) for resource in resources]
-
